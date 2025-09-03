@@ -35,7 +35,7 @@ export default function Login() {
       localStorage.setItem('token', data.token);
       localStorage.setItem('id_user', data.user.id)
       toast.success('Login realizado com sucesso!');
-      window.location.href = '/';
+      window.location.href = '/tasks';
     } catch (error) {
       const errors = get(error, 'response.data.errors', []) as string[];
 

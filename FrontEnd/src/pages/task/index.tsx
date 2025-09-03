@@ -19,11 +19,11 @@ export default function Task() {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    setIsloading(true);
     if (!description || !priority || !responsable || !status) {
       toast.error('Todos os campos precisam ser preenchidos');
       return;
     }
+    setIsloading(true);
     try {
       const { data } = await api.post('/tasks', {
         description,
@@ -33,7 +33,7 @@ export default function Task() {
         id_user,
       });
       toast.success('Atividade criada com sucesso!');
-      navigate('/');
+      navigate('/tasks');
     } catch (error) {
       const errorMessage = get(
         error,
@@ -80,12 +80,16 @@ export default function Task() {
         </label>
         <label htmlFor="status">
           Status
-          <input
-            type="text"
+          <select
             name="status"
             value={status}
             onChange={e => setStatus(e.target.value)}
-          />
+          >
+            <option value="">Selecione um status</option>
+            <option value="Pendente">Pendente</option>
+            <option value="Em-andamento">Em Andamento</option>
+            <option value="Concluida">Concluída</option>
+          </select>
         </label>
         <button>Salvar</button>
       </Form>

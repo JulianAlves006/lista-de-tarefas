@@ -1,6 +1,6 @@
 import * as admin from 'firebase-admin';
 import express from 'express';
-import * as serviceAccount from '../desafio-pleno-firebase-adminsdk-fbsvc-04f71a1d57.json';
+import * as serviceAccount from '../desafio-pleno-firebase-adminsdk-fbsvc-a600259081.json';
 const app = express();
 
 try {

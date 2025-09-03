@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import app from './app';
-import { initWSS } from "./middlewares/websocket";
 
 const port = process.env.APP_PORT;
 
@@ -13,4 +12,3 @@ app.on('error', error => {
   console.error('Erro no servidor:', error);
 });
 
-initWSS(server);

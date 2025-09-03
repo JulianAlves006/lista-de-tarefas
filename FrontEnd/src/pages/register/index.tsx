@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 import { isEmail } from 'validator';
 import { get } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 import { Form, Container } from '../../style/index';
 import api from '../../services/axios.ts';
 import Loading from '../../components/loading/index.tsx';
 
 export default function Register() {
+  const navigate = useNavigate();
   const [isLoading, setIsloading] = useState(false);
   const [name, setName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -40,6 +42,7 @@ export default function Register() {
         password,
       });
       toast.success("Usuário criado com sucesso!");
+      navigate('/');
     } catch (error) {
       const errors = get(error, 'response.data.errors', []) as string[];
 

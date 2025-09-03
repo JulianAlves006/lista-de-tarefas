@@ -1,16 +1,37 @@
 import styled from 'styled-components';
 import { primaryColor } from '../../config/colors';
 
+export const CardsContainer = styled.section`
+  display: flex;
+  height: 100%;
+  margin-top: 15px;
+`;
+
 export const TaskContainer = styled.ul`
-  margin-top: 20px;
+  border: solid 1px grey;
+  border-radius: 10px;
   padding: 10px;
-  div {
-    padding: 5px 0;
+  width: 400px;
+  margin: 0px 10px 0px 10px;
+  padding: 10px 20px 0 20px;
+  height: 98%;
+
+  div + div{
+    margin: 10px 0 0px 0;
   }
 
-  div + div {
-    border-top: 1px solid #ccc;
+  h1{
+    font-size: 24px;
+    text-align: center;
   }
+`;
+
+export const Task = styled.div`
+  border: 1px solid grey;
+  border-radius: 20px;
+  padding: 5px 0;
+  margin-top: 30px;
+  cursor: grab;
 
   li {
     display: flex;
@@ -22,13 +43,6 @@ export const TaskContainer = styled.ul`
     margin-top: 8px;
   }
 
-  a {
-    transition: all 300ms;
-    &:hover {
-      filter: brightness(80%);
-    }
-  }
-
   button {
     border: none;
     color: ${primaryColor};
@@ -36,9 +50,14 @@ export const TaskContainer = styled.ul`
     cursor: pointer;
     margin-bottom: -10px;
   }
+
+  &:hover{
+    border: 1.5px solid ${primaryColor};
+  }
 `;
 
 export const Title = styled.section`
+  margin: 5px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -54,10 +73,31 @@ export const Title = styled.section`
     border: solid 1px ${primaryColor};
     border-radius: 4px;
     transition: all 300ms;
+    margin: 15px 10px 0 10px;
 
     &:hover {
       background: ${primaryColor};
       color: #fff;
+    }
+  }
+
+  label{
+    display: flex;
+    flex-direction: column;
+    margin-left: auto;
+  }
+
+  input {
+    height: 30px;
+    font-size: 18px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 0 10px;
+    margin-top: 5px;
+    transition: all 300ms;
+
+    &:focus {
+      border: 1px solid ${primaryColor};
     }
   }
 `;
