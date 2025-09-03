@@ -20,6 +20,8 @@ export const authMiddleware = (req: any, res: any, next: any) => {
         return res.status(401).json({ error: 'Token inválido' });
       }
 
+      req.user = jwt.decode(token);
+
       next();
     });
   } catch (error) {

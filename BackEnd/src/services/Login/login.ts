@@ -16,11 +16,11 @@ export default new (class LoginService {
         .where('email', '==', email)
         .limit(1)
         .get();
-      if (snap.empty) throw new Error('Usuário não encontrado');
+      if (snap.empty) throw new Error('Usuário ou senha inválidos');
 
       const userData = snap.docs[0].data();
       const isValid = await checkPassword(password, userData.passwordHash);
-      if (!isValid) throw new Error('Senha incorreta');
+      if (!isValid) throw new Error('Usuário ou senha inválidos');
 
       const payload = {
         id: snap.docs[0].id,

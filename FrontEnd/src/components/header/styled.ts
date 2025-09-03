@@ -28,4 +28,8 @@ export const Nav = styled.nav`
     background: none;
     border: none;
   }
+
+  .loginLogout{
+    margin-left: auto;
+  }
 `;

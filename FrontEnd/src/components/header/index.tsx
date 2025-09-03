@@ -1,30 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { FaHome, FaSignInAlt, FaSignOutAlt, FaUserAlt } from 'react-icons/fa';
+import { FaHome, FaSignInAlt, FaSignOutAlt, FaUserPlus } from 'react-icons/fa';
 import { Nav } from './styled';
 
 export default function Header() {
   function handleLogOut(){
-    localStorage.removeItem('token')
-    window.location.reload()
+    localStorage.removeItem('token');
+    localStorage.removeItem('id_user');
+    window.location.href = '/login';
   }
   return (
     <Nav>
       <Link to="/">
         <FaHome size={25} />
       </Link>
+      <Link to="/register">
+        <FaUserPlus size={25} />
+      </Link>
       {localStorage.getItem('token') === null ? (
-        <Link to="/login">
+        <Link className='loginLogout' to="/login">
           <FaSignInAlt size={25} />
         </Link>
       ) : (
-        <button onClick={handleLogOut}>
+        <button className='loginLogout' onClick={handleLogOut}>
           <FaSignOutAlt size={25} />
         </button>
       )}
-      <Link to="/register">
-        <FaUserAlt size={25} />
-      </Link>
     </Nav>
   );
 }
