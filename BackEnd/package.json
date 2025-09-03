@@ -25,6 +25,7 @@
     "mongoose": "^8.18.0",
     "os": "^0.1.2",
     "reflect-metadata": "^0.2.2",
+    "ws": "^8.18.3",
     "zod": "^4.1.5"
   },
   "devDependencies": {
@@ -33,6 +34,7 @@
     "@types/express": "^5.0.3",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^22.18.0",
+    "@types/ws": "^8.18.1",
     "@typescript-eslint/eslint-plugin": "^8.39.1",
     "@typescript-eslint/parser": "^8.39.1",
     "eslint": "^9.33.0",

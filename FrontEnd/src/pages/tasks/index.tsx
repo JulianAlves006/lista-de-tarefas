@@ -64,15 +64,39 @@ export default function Tasks() {
     async function getData() {
       setIsLoading(true);
       try {
-        const response = await api.get('/tasks');
+        const response = await api.get(`/tasks`);
         setTasks(response.data);
       } catch (error) {
-        toast.error('Erro ao carregar tarefas');
+        toast.error(error as string);
       } finally {
         setIsLoading(false);
       }
     }
     getData();
+
+    const ws = new WebSocket('ws://localhost:9090');
+
+    ws.onopen = () => {
+      ws.send("hello from client");
+    };
+
+    ws.onmessage = (event) => {
+      try {
+        const msg = JSON.parse(event.data);
+        if (msg?.type === "tasks:changed") {
+          // refetch leve (sem dar reload na página)
+          getData();
+        }
+      } catch {
+        // mensagens simples/string (ex: "connected") podem cair aqui — ignore
+      }
+    };
+    ws.onerror = (e) => {
+      console.warn('WebSocket error', e);
+    };
+    return () => {
+      ws.close();
+    };
   }, []);
 
   async function handleDelete(e: any) {
@@ -92,6 +116,7 @@ export default function Tasks() {
         'Erro ao deletar tarefa'
       );
       toast.error(errorMessage);
+      window.location.reload();
     } finally {
       setIsLoading(false);
       closeModalDelete();

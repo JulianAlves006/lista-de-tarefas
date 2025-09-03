@@ -1,9 +1,13 @@
 import { db } from '../../database/model';
 
 class TaskGeter {
-  async getAllTasks() {
+  async getAllTasks(id_user: string) {
     try {
-      const snapshot = await db.collection('tasks').get();
+      if(!id_user) throw new Error('Você precisa logar para ver suas tarefas');
+      const snapshot = await db
+        .collection('tasks')
+        .where('id_user', '==', id_user)
+        .get();
 
       const tasks = snapshot.docs.map(doc => ({
         id: doc.id,
@@ -12,20 +16,6 @@ class TaskGeter {
 
       return tasks;
     } catch (error) {
-      console.error(error);
-      return error;
-    }
-  }
-
-  async getTaskById(id: string) {
-    try {
-      const doc = await db.collection('tasks').doc(id).get();
-      if (doc.exists) {
-        return { id: doc.id, ...doc.data() };
-      }
-      return null;
-    } catch (error) {
-      console.error(error);
       return error;
     }
   }

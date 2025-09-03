@@ -33,6 +33,7 @@ export default function Login() {
         password,
       });
       localStorage.setItem('token', data.token);
+      localStorage.setItem('id_user', data.user.id)
       toast.success('Login realizado com sucesso!');
       window.location.href = '/';
     } catch (error) {

@@ -47,7 +47,10 @@ export default function Register() {
         errors.map(error => toast.error(error));
         return;
       }
-      toast.error('Erro desconhecido');
+
+      // Tratar erro genérico
+      const errorMessage = get(error, 'response.data.error');
+      toast.error(errorMessage);
     }finally{
       setIsloading(false);
     }
