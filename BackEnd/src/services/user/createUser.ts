@@ -2,6 +2,10 @@
 import { db } from '../../database/model';
 import {randomUUID} from 'node:crypto'
 import argon2 from 'argon2';
+import jwt from 'jsonwebtoken';
+
+
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export interface User {
   id: string;
@@ -17,6 +21,7 @@ export default class UserService {
 
   static async createUser(body: any) {
     try {
+      const id = randomUUID()
       const { name, email, password } = body ?? {};
       if (!name || !email || !password) {
         throw new Error('Todos os campos são obrigatórios');
@@ -34,7 +39,7 @@ export default class UserService {
       });
 
       const user: User = {
-        id: randomUUID(),
+        id,
         name,
         email,
         passwordHash,
@@ -42,9 +47,19 @@ export default class UserService {
         role: 'admin',
       };
 
+      const payload = {
+        id: id,
+        email: email,
+        role: 'admin',
+      };
+
+      const token = jwt.sign(payload, JWT_SECRET, {
+        expiresIn: '5h', // tempo de expiração
+      });
+
       await this.usersCol.add(user);
       // Evite retornar passwordHash
-      return { id: user.id, name: user.name, email: user.email, role: user.role, createdAt: user.createdAt };
+      return { id: user.id, name: user.name, email: user.email, role: user.role, createdAt: user.createdAt, token: token };
     } catch (error) {
       return error;
     }

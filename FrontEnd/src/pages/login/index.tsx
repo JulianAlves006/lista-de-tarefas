@@ -2,12 +2,14 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { isEmail } from 'validator';
 import { get } from 'lodash';
+import { useNavigate } from 'react-router-dom';
 
 import { Container, Form } from '../../style';
 import api from '../../services/axios';
 import Loading from '../../components/loading';
 
 export default function Login() {
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -35,7 +37,7 @@ export default function Login() {
       localStorage.setItem('token', data.token);
       localStorage.setItem('id_user', data.user.id)
       toast.success('Login realizado com sucesso!');
-      window.location.href = '/tasks';
+      navigate('/tasks');
     } catch (error) {
       const errors = get(error, 'response.data.errors', []) as string[];
 

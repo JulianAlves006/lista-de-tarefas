@@ -36,13 +36,16 @@ export default function Register() {
     if (formErrors) return;
     setIsloading(true);
     try {
-      await api.post('/users', {
+      const {data} = await api.post('/users', {
         name,
         email,
         password,
       });
+      console.log(data);
       toast.success("Usuário criado com sucesso!");
-      navigate('/');
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('id_user', data.id)
+      navigate('/tasks');
     } catch (error) {
       const errors = get(error, 'response.data.errors', []) as string[];
 

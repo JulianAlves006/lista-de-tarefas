@@ -68,7 +68,8 @@ export default function Tasks() {
         const response = await api.get(`/tasks`);
         setTasks(response.data);
       } catch (error) {
-        toast.error(error as string);
+        const msg = get(error, 'response.data.error') || (error as Error)?.message || 'Erro inesperado';
+        toast.error(msg);
       } finally {
         setIsLoading(false);
       }
@@ -87,13 +88,8 @@ export default function Tasks() {
       const response = await api.get('/tasks');
       setTasks(response.data);
     } catch (error) {
-      const errorMessage = get(
-        error,
-        'response.data.error',
-        'Erro ao deletar tarefa'
-      );
-      toast.error(errorMessage);
-      window.location.reload();
+      const msg = get(error, 'response.data.error') || (error as Error)?.message || 'Erro inesperado';
+      toast.error(msg);
     } finally {
       setIsLoading(false);
       closeModalDelete();
@@ -133,74 +129,71 @@ export default function Tasks() {
     }
   }
 
-  const tasksFilter = tasks.filter((task) => task.description.startsWith(filter));
+  const norm = (s?: string) => (s ?? '').toLowerCase();
 
-  const tasksPedings = tasksFilter.filter((task) => task.status.startsWith('Pendente'));
-  const tasksWorking = tasksFilter.filter((task) => task.status.startsWith('Em-andamento'));
-  const tasksDone = tasksFilter.filter((task) => task.status.startsWith('Concluida'));
+  const tasksFilter = tasks.filter(t => norm(t.description).includes(norm(filter)));
+  const statusOf = (t: Task) => norm(t.status);
+  const tasksPedings = tasksFilter.filter(t => statusOf(t).startsWith('pendente'));
+  const tasksWorking = tasksFilter.filter(t => statusOf(t).startsWith('em-andamento'));
+  const tasksDone    = tasksFilter.filter(t => statusOf(t).startsWith('concluida'));
 
   // Drag and Drop functionality
   useEffect(() => {
-    const cards = document.querySelectorAll('#task');
-    const columns = document.querySelectorAll('#column');
+    const cards = document.querySelectorAll<HTMLElement>('[data-role="task-card"]');
+    const columns = document.querySelectorAll<HTMLElement>('[data-role="task-column"]');
 
-    const handleDragStart = (e: Event) => {
-      if (e.currentTarget instanceof HTMLElement) {
-        e.currentTarget.classList.add('dragging');
-      }
+    const handleDragStart = (e: DragEvent) => {
+      const el = e.currentTarget as HTMLElement | null;
+      el?.classList.add('dragging');
+      e.dataTransfer?.setData('text/plain', el?.getAttribute('data-task') || '');
     };
 
-    const handleDragEnd = (e: Event) => {
-      if (e.currentTarget instanceof HTMLElement) {
-        e.currentTarget.classList.remove('dragging');
-      }
+    const handleDragEnd = (e: DragEvent) => {
+      (e.currentTarget as HTMLElement)?.classList.remove('dragging');
     };
 
-    const handleDragOver = (e: Event) => {
+    const handleDragOver = (e: DragEvent) => {
       e.preventDefault();
-      if (e.currentTarget instanceof HTMLElement) {
-        e.currentTarget.classList.add('cards-hover');
-      }
+      (e.currentTarget as HTMLElement)?.classList.add('cards-hover');
     };
 
-    const handleDragLeave = (e: Event) => {
-      if (e.currentTarget instanceof HTMLElement) {
-        e.currentTarget.classList.remove('cards-hover');
-      }
+    const handleDragLeave = (e: DragEvent) => {
+      (e.currentTarget as HTMLElement)?.classList.remove('cards-hover');
     };
 
-    const handleDrop = async (e: Event) => {
+    const handleDrop = async (e: DragEvent) => {
       e.preventDefault();
-      if (e.currentTarget instanceof HTMLElement) {
-        e.currentTarget.classList.remove('cards-hover');
-      }
-      const dragCard = document.querySelector('.dragging') as HTMLElement;
-      if (dragCard && e.currentTarget instanceof HTMLElement) {
-        // Capturar informações da coluna e do card
-        const newStatus = e.currentTarget.getAttribute('data-status');
+      const col = e.currentTarget as HTMLElement;
+      col?.classList.remove('cards-hover');
+
+      const dragCard = document.querySelector<HTMLElement>('.dragging');
+      if (!dragCard) return;
+
+      const newStatus = col?.getAttribute('data-status') || '';
+      let task: Task | null = null;
+      try {
         const taskData = dragCard.getAttribute('data-task');
-        const task = taskData ? JSON.parse(taskData) : null;
+        if (taskData) task = JSON.parse(taskData) as Task;
+      } catch (err) {
+        console.warn('Falha ao ler data-task:', err);
+        return;
+      }
+      if (!task) return;
 
-        // Mover o card visualmente
-        e.currentTarget.appendChild(dragCard);
+      // Mover visualmente
+      col.appendChild(dragCard);
 
-        //Editar no back
-        if(newStatus === task?.status) return;
-        setIsLoading(true);
-        try {
-          await api.put('/tasks', {
-            id: task.id,
-            description: task.description,
-            responsable: task.responsable,
-            status: newStatus,
-            priority: task.priority,
-          });
-          window.location.reload();
-        } catch (error) {
-          toast.error(error as string);
-        }finally{
-          setIsLoading(false);
-        }
+      if (newStatus === task.status) return;
+
+      setIsLoading(true);
+      try {
+        await api.put('/tasks', { ...task, status: newStatus });
+        const response = await api.get('/tasks');
+        setTasks(Array.isArray(response.data) ? response.data : []);
+      } catch (error) {
+        toast.error('Erro ao mover tarefa');
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -228,6 +221,7 @@ export default function Tasks() {
       });
     };
   }, [tasks]);
+
   return (
     <>
       {isLoading && <Loading />}
@@ -245,11 +239,11 @@ export default function Tasks() {
         )}
       </Title>
       <CardsContainer>
-        <TaskContainer id="column" data-status="Pendente">
+        <TaskContainer data-role="task-column" data-status="Pendente">
           <h1>Pendentes</h1>
           {tasksPedings.length > 0 &&
-            tasksPedings.map((task, index) => (
-              <Task id='task' draggable="true" data-task={JSON.stringify(task)} key={index}>
+            tasksPedings.map((task) => (
+              <Task key={task.id} draggable="true" data-role="task-card" data-task={JSON.stringify(task)}>
                 <li>
                   <p>
                     <strong>Descrição:</strong> {task.description}
@@ -294,11 +288,11 @@ export default function Tasks() {
             ))
           }
         </TaskContainer>
-        <TaskContainer id="column" data-status="Em-andamento">
+        <TaskContainer data-role="task-column" data-status="Em-andamento">
           <h1>Em andamento</h1>
           {tasksWorking.length > 0 &&
-            tasksWorking.map((task, index) => (
-              <Task id='task' draggable="true" data-task={JSON.stringify(task)} key={index}>
+            tasksWorking.map((task) => (
+              <Task key={task.id} draggable="true" data-role="task-card" data-task={JSON.stringify(task)}>
                 <li>
                   <p>
                     <strong>Descrição:</strong> {task.description}
@@ -343,11 +337,11 @@ export default function Tasks() {
             ))
           }
         </TaskContainer>
-        <TaskContainer id="column" data-status="Concluida">
+        <TaskContainer data-role="task-column" data-status="Concluida">
           <h1>Concluidas</h1>
           {tasksDone.length > 0 &&
-            tasksDone.map((task, index) => (
-              <Task id='task' draggable="true" data-task={JSON.stringify(task)} key={index}>
+            tasksDone.map((task) => (
+              <Task key={task.id} draggable="true" data-role="task-card" data-task={JSON.stringify(task)}>
                 <li>
                   <p>
                     <strong>Descrição:</strong> {task.description}

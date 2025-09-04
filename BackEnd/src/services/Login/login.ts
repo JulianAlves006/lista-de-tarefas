@@ -2,7 +2,7 @@ import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 import { db } from '../../database/model';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'sua-chave-secreta-super-segura';
+const JWT_SECRET = process.env.JWT_SECRET as string;
 
 export default new (class LoginService {
   async login(body: any) {
