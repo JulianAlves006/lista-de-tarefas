@@ -13,7 +13,7 @@ export default function AppRoutes() {
       <Route path='/tasks' element={<Tasks />} />
       <Route path='/register' element={<Register />}/>
       <Route path='/task' element={<Task />} />
-      <Route path='/task/:id' element={<Task />} />
+      <Route path="*" element={<Task />} />
     </Routes>
   );
 }
