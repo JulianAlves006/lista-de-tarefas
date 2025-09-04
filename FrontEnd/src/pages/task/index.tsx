@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { get } from 'lodash';
@@ -25,7 +25,7 @@ export default function Task() {
     }
     setIsloading(true);
     try {
-      const { data } = await api.post('/tasks', {
+      await api.post('/tasks', {
         description,
         priority,
         responsable,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { isEmail } from 'validator';
 import { get } from 'lodash';
@@ -36,7 +36,7 @@ export default function Register() {
     if (formErrors) return;
     setIsloading(true);
     try {
-      const { data } = await api.post('/users', {
+      await api.post('/users', {
         name,
         email,
         password,
