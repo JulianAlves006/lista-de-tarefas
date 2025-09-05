@@ -180,16 +180,18 @@ export default function Tasks() {
       }
       if (!task) return;
 
-      // Mover visualmente
-      col.appendChild(dragCard);
-
       if (newStatus === task.status) return;
 
       setIsLoading(true);
       try {
         await api.put('/tasks', { ...task, status: newStatus });
-        const response = await api.get('/tasks');
-        setTasks(Array.isArray(response.data) ? response.data : []);
+        toast.success('Status alterado com sucesso!');
+
+        setTasks(prevTasks =>
+          prevTasks.map(t =>
+            t.id === task?.id ? { ...t, status: newStatus } : t
+          )
+        );
       } catch (error) {
         toast.error('Erro ao mover tarefa');
       } finally {
