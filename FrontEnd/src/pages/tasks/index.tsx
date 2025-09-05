@@ -152,7 +152,7 @@ export default function Tasks() {
   const ordem = ordemPorSelecao[chave];
 
   // Se a escolha não bate com as três conhecidas, retorna cópia sem alterar
-  if (!ordem) return [...tasks];
+  if (!ordem) return;
 
   // Cria um ranking numérico: quanto menor, mais alto na lista
   const rank = Object.fromEntries(ordem.map((p: string, i: number) => [p, i]));
