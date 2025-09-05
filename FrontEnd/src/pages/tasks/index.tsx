@@ -20,6 +20,7 @@ interface Task {
 }
 
 export default function Tasks() {
+  const [priorityFilter, setPriorityFilter] = useState('Alta');
   const [filter, setFilter] = useState('');
   const [modalDeleteIsOpen, setModaldeleteIsOpen] = useState(false);
   const [modalEditIsOpen, setModalEditIsOpen] = useState(false);
@@ -66,7 +67,12 @@ export default function Tasks() {
       setIsLoading(true);
       try {
         const response = await api.get(`/tasks`);
-        setTasks(response.data);
+        const listaOrdenada = [...response.data].sort((a, b) => {
+          if (a.priority === priorityFilter && b.priority !== priorityFilter) return -1;
+          if (b.priority === priorityFilter && a.priority !== priorityFilter) return 1;
+          return 0; // mantém a ordem dos demais
+        });
+        setTasks(listaOrdenada);
       } catch (error) {
         const msg = get(error, 'response.data.error') || (error as Error)?.message || 'Erro inesperado';
         toast.error(msg);
@@ -129,13 +135,21 @@ export default function Tasks() {
     }
   }
 
+  const listaOrdenada = [...tasks].sort((a, b) => {
+    if (a.priority === priorityFilter && b.priority !== priorityFilter) return -1;
+    if (b.priority === priorityFilter && a.priority !== priorityFilter) return 1;
+    return 0; // mantém a ordem dos demais
+  });
+
   const norm = (s?: string) => (s ?? '').toLowerCase();
 
-  const tasksFilter = tasks.filter(t => norm(t.description).includes(norm(filter)));
+  const tasksFilter = listaOrdenada.filter(t => norm(t.description).includes(norm(filter)));
   const statusOf = (t: Task) => norm(t.status);
   const tasksPedings = tasksFilter.filter(t => statusOf(t).startsWith('pendente'));
   const tasksWorking = tasksFilter.filter(t => statusOf(t).startsWith('em-andamento'));
   const tasksDone    = tasksFilter.filter(t => statusOf(t).startsWith('concluida'));
+
+
 
   // Drag and Drop functionality
   useEffect(() => {
@@ -229,9 +243,17 @@ export default function Tasks() {
       {isLoading && <Loading />}
       <Title>
         <h1>Tarefas</h1>
-        <label htmlFor="filter">
+        <label htmlFor="priorityFilter">
+          Ordernar por prioridade
+          <select value={priorityFilter} onChange={e => setPriorityFilter(e.target.value)} name="priorityFilter" id="priorityFilter">
+            <option value="Alta">Alta</option>
+            <option value="Media">Média</option>
+            <option value="Baixa">Baixa</option>
+          </select>
+        </label>
+        <label htmlFor="descFilter">
           Filtro de descrição
-          <input type="text" name="filter" id="filter" value={filter} onChange={e => setFilter(e.target.value)}/>
+          <input type="text" name="descFilter" id="descFilter" value={filter} onChange={e => setFilter(e.target.value)}/>
         </label>
         {localStorage.getItem('token') !== null && (
           <Link to="/task">
@@ -453,18 +475,21 @@ export default function Tasks() {
                 </label>
                 <label htmlFor="priority">
                   Prioridade
-                  <input
-                    type="text"
+                  <select
                     name="priority"
                     value={priority}
                     onChange={e => setPriority(e.target.value)}
-                  />
+                  >
+                    <option value="Alta">Alta</option>
+                    <option value="Media">Média</option>
+                    <option value="Baixa">Baixa</option>
+                  </select>
                 </label>
                 <div className="buttons">
                 <button className="cancel" onClick={closeModalEdit}>
                   Cancelar
                 </button>
-                <button type="submit">Editar</button>
+                <button type="submit">Salvar</button>
               </div>
               </Form>
             </section>

@@ -60,15 +60,6 @@ export default function Task() {
             onChange={e => setDescription(e.target.value)}
           />
         </label>
-        <label htmlFor="priority">
-          Prioridade
-          <input
-            type="text"
-            name="priority"
-            value={priority}
-            onChange={e => setPriority(e.target.value)}
-          />
-        </label>
         <label htmlFor="responsable">
           Responsavel
           <input
@@ -77,6 +68,19 @@ export default function Task() {
             value={responsable}
             onChange={e => setResponsable(e.target.value)}
           />
+        </label>
+        <label htmlFor="priority">
+          Prioridade
+          <select
+            name="priority"
+            value={priority}
+            onChange={e => setPriority(e.target.value)}
+          >
+            <option value="">Selecione uma prioridade</option>
+            <option value="Alta">Alta</option>
+            <option value="Media">Média</option>
+            <option value="Baixa">Baixa</option>
+          </select>
         </label>
         <label htmlFor="status">
           Status

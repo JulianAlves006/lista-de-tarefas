@@ -14,7 +14,9 @@ export const TaskContainer = styled.ul`
   width: 400px;
   margin: 0px 10px 0px 10px;
   padding: 10px 20px 0 20px;
-  height: 98%;
+  height: 98%; /* ajuste conforme necessário */
+  overflow-y: auto;  /* ativa scroll vertical só no container */
+  overflow-x: hidden; /* evita barra horizontal */
 
   div + div{
     margin: 10px 0 0px 0;
@@ -50,8 +52,9 @@ export const Task = styled.div`
     content: attr(data-tooltip);
     position: absolute;
     width: max-content;
-    max-width: 80%;
-    overflow: hidden;
+    max-width: 30%;
+    white-space: normal;
+    overflow-wrap: break-word;:
     font-size: 12px;
     margin-top: 18px;
     padding: 6px;
@@ -111,7 +114,7 @@ export const Title = styled.section`
     margin-left: auto;
   }
 
-  input {
+  input, select {
     height: 30px;
     font-size: 18px;
     border: 1px solid #ddd;
@@ -122,6 +125,10 @@ export const Title = styled.section`
 
     &:focus {
       border: 1px solid ${primaryColor};
+    }
+    
+    &:hover {
+      background-color: ${primaryColor};
     }
   }
 `;
