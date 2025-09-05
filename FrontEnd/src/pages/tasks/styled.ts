@@ -31,6 +31,8 @@ export const Task = styled.div`
   border-radius: 20px;
   padding: 5px 0;
   margin-top: 30px;
+  overflow: hidden;
+  white-space: nowrap;
   cursor: grab;
 
   li {
@@ -41,6 +43,28 @@ export const Task = styled.div`
 
   p {
     margin-top: 8px;
+    display: flex;
+  }
+
+  section::before{
+    content: attr(data-tooltip);
+    position: absolute;
+    width: max-content;
+    max-width: 80%;
+    overflow: hidden;
+    font-size: 12px;
+    margin-top: 18px;
+    padding: 6px;
+    background: #0d1117;
+    border-radius: 4px;
+    color: #cccfd3;
+    opacity: 0;
+    display: none;
+  }
+
+  section:hover::before{
+    opacity: 1;
+    display: inline;
   }
 
   button {

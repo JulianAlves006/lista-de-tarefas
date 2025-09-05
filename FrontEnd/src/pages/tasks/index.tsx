@@ -248,19 +248,16 @@ export default function Tasks() {
               <Task key={task.id} draggable="true" data-role="task-card" data-task={JSON.stringify(task)}>
                 <li>
                   <p>
-                    <strong>Descrição:</strong> {task.description}
+                    <strong>Descrição:</strong> <section data-tooltip={task.description}>{task.description}</section>
                   </p>
                   <p>
-                    <strong>Responsável:</strong> {task.responsable}
+                    <strong>Responsável:</strong> <section data-tooltip={task.responsable}>{task.responsable}</section>
                   </p>
                   <p>
-                    <strong>Status:</strong> {task.status}
+                    <strong>Status:</strong> <section data-tooltip={task.status}>{task.status}</section>
                   </p>
                   <p>
-                    <strong>Prioridade:</strong> {task.priority}
-                  </p>
-                  <p>
-                    <strong>Computador:</strong> {task.computerName}
+                    <strong>Prioridade:</strong> <section data-tooltip={task.priority}>{task.priority}</section>
                   </p>
                   {localStorage.getItem('token') !== null && (
                     <p>
@@ -297,19 +294,16 @@ export default function Tasks() {
               <Task key={task.id} draggable="true" data-role="task-card" data-task={JSON.stringify(task)}>
                 <li>
                   <p>
-                    <strong>Descrição:</strong> {task.description}
+                    <strong>Descrição:</strong> <section data-tooltip={task.description}>{task.description}</section>
                   </p>
                   <p>
-                    <strong>Responsável:</strong> {task.responsable}
+                    <strong>Responsável:</strong> <section data-tooltip={task.responsable}>{task.responsable}</section>
                   </p>
                   <p>
-                    <strong>Status:</strong> {task.status}
+                    <strong>Status:</strong> <section data-tooltip={task.status}>{task.status}</section>
                   </p>
                   <p>
-                    <strong>Prioridade:</strong> {task.priority}
-                  </p>
-                  <p>
-                    <strong>Computador:</strong> {task.computerName}
+                    <strong>Prioridade:</strong> <section data-tooltip={task.priority}>{task.priority}</section>
                   </p>
                   {localStorage.getItem('token') !== null && (
                     <p>
@@ -346,19 +340,16 @@ export default function Tasks() {
               <Task key={task.id} draggable="true" data-role="task-card" data-task={JSON.stringify(task)}>
                 <li>
                   <p>
-                    <strong>Descrição:</strong> {task.description}
+                    <strong>Descrição:</strong> <section data-tooltip={task.description}>{task.description}</section>
                   </p>
                   <p>
-                    <strong>Responsável:</strong> {task.responsable}
+                    <strong>Responsável:</strong> <section data-tooltip={task.responsable}>{task.responsable}</section>
                   </p>
                   <p>
-                    <strong>Status:</strong> {task.status}
+                    <strong>Status:</strong> <section data-tooltip={task.status}>{task.status}</section>
                   </p>
                   <p>
-                    <strong>Prioridade:</strong> {task.priority}
-                  </p>
-                  <p>
-                    <strong>Computador:</strong> {task.computerName}
+                    <strong>Prioridade:</strong> <section data-tooltip={task.priority}>{task.priority}</section>
                   </p>
                   {localStorage.getItem('token') !== null && (
                     <p>
