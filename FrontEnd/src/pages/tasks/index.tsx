@@ -135,16 +135,39 @@ export default function Tasks() {
     }
   }
 
+  const norm = (s: string) =>
+    (s ?? "")
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, "")
+      .toLowerCase();
+
+  // Mapa de ordenação conforme a escolha do usuário
+  const ordemPorSelecao: Record<string, string[]> = {
+    alta:  ["alta",  "media", "baixa"],
+    media: ["media", "alta",  "baixa"],
+    baixa: ["baixa", "media", "alta"],
+  };
+
+  const chave = norm(priorityFilter);
+  const ordem = ordemPorSelecao[chave];
+
+  // Se a escolha não bate com as três conhecidas, retorna cópia sem alterar
+  if (!ordem) return [...tasks];
+
+  // Cria um ranking numérico: quanto menor, mais alto na lista
+  const rank = Object.fromEntries(ordem.map((p: string, i: number) => [p, i]));
+
+  // Sort estável (em engines modernas: V8/Chromium, Node 12+, Safari 14+, Firefox 70+)
   const listaOrdenada = [...tasks].sort((a, b) => {
-    if (a.priority === priorityFilter && b.priority !== priorityFilter) return -1;
-    if (b.priority === priorityFilter && a.priority !== priorityFilter) return 1;
-    return 0; // mantém a ordem dos demais
+    const ap = rank[norm(a.priority)] ?? 999; // desconhecidos vão pro fim
+    const bp = rank[norm(b.priority)] ?? 999;
+    return ap - bp;
   });
 
-  const norm = (s?: string) => (s ?? '').toLowerCase();
+  const norm2 = (s?: string) => (s ?? '').toLowerCase();
 
-  const tasksFilter = listaOrdenada.filter(t => norm(t.description).includes(norm(filter)));
-  const statusOf = (t: Task) => norm(t.status);
+  const tasksFilter = listaOrdenada.filter(t => norm2(t.description).includes(norm2(filter)));
+  const statusOf = (t: Task) => norm2(t.status);
   const tasksPedings = tasksFilter.filter(t => statusOf(t).startsWith('pendente'));
   const tasksWorking = tasksFilter.filter(t => statusOf(t).startsWith('em-andamento'));
   const tasksDone    = tasksFilter.filter(t => statusOf(t).startsWith('concluida'));
