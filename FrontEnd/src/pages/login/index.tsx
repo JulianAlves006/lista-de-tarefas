@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { isEmail } from 'validator';
 import { get } from 'lodash';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import { Container, Form } from '../../style';
 import api from '../../services/axios';
 import Loading from '../../components/loading';
+import { Register } from './styled';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -78,6 +79,7 @@ export default function Login() {
         </label>
         <button type="submit">Entrar</button>
       </Form>
+      <Register>Não tem uma conta? <Link to='/register'>Registre-se aqui clicando aqui!</Link></Register>
     </Container>
   );
 }

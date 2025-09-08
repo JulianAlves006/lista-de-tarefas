@@ -31,5 +31,12 @@ export const Nav = styled.nav`
 
   .loginLogout{
     margin-left: auto;
+    display: flex;
+    align-items: center;
+
+    p{
+      margin-right: 10px;
+      font-size: 15px;
+    }
   }
 `;

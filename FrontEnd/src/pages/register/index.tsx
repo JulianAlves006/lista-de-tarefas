@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { toast } from 'react-toastify';
 import { isEmail } from 'validator';
 import { get } from 'lodash';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 import { Form, Container } from '../../style/index';
+import { Login } from './styled.ts';
 import api from '../../services/axios.ts';
 import Loading from '../../components/loading/index.tsx';
 
@@ -96,6 +97,7 @@ export default function Register() {
         </label>
         <button>Salvar</button>
       </Form>
+      <Login>Já tem uma conta? <Link to='/'>Logue clicando aqui!</Link></Login>
     </Container>
   );
 }

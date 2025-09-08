@@ -66,13 +66,19 @@ export default function Tasks() {
     async function getData() {
       setIsLoading(true);
       try {
-        const response = await api.get(`/tasks`);
-        const listaOrdenada = [...response.data].sort((a, b) => {
-          if (a.priority === priorityFilter && b.priority !== priorityFilter) return -1;
-          if (b.priority === priorityFilter && a.priority !== priorityFilter) return 1;
-          return 0; // mantém a ordem dos demais
-        });
-        setTasks(listaOrdenada);
+        if(localStorage.getItem('token')){
+          const response = await api.get(`/tasks`);
+          const listaOrdenada = [...response.data].sort((a, b) => {
+            if (a.priority === priorityFilter && b.priority !== priorityFilter) return -1;
+            if (b.priority === priorityFilter && a.priority !== priorityFilter) return 1;
+            return 0; // mantém a ordem dos demais
+          });
+          setTasks(listaOrdenada);
+        }
+        else{
+          toast.error('Você precisa logar para poder verificar suas tarefas');
+          return 0;
+        }
       } catch (error) {
         const msg = get(error, 'response.data.error') || (error as Error)?.message || 'Erro inesperado';
         toast.error(msg);

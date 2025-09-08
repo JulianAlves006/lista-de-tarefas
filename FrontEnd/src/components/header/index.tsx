@@ -1,6 +1,6 @@
 
 import { Link, useNavigate } from 'react-router-dom';
-import { FaHome, FaSignInAlt, FaSignOutAlt, FaUserPlus } from 'react-icons/fa';
+import { FaHome, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 import { Nav } from './styled';
 import { useEffect, useState } from 'react';
 
@@ -43,16 +43,13 @@ export default function Header() {
       <Link to="/tasks">
         <FaHome size={25} />
       </Link>
-      <Link to="/register">
-        <FaUserPlus size={25} />
-      </Link>
       {isLogged ? (
         <button className='loginLogout' onClick={handleLogOut}>
-          <FaSignOutAlt size={25} />
+          <p>Deslogar</p><FaSignOutAlt size={25} />
         </button>
       ) : (
         <Link className='loginLogout' to="/">
-          <FaSignInAlt size={25} />
+          <p>Logar / Registrar</p><FaSignInAlt size={25} />
         </Link>
       )}
     </Nav>
