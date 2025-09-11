@@ -16,7 +16,6 @@ export default function User() {
   const [password, setPassword] = useState('');
   const user = localStorage.getItem('user');
   const userData = user ? JSON.parse(user) : null;
-  console.log(userData);
 
   useEffect(() => {
     if(user === null && localStorage.getItem('token') === null){

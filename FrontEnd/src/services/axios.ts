@@ -2,7 +2,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 
 const api = axios.create({
-  baseURL: 'https://lista-de-tarefas-ju34.onrender.com',
+  baseURL: 'http://localhost:9090',
 });
 
 // Interceptor para adicionar token automaticamente

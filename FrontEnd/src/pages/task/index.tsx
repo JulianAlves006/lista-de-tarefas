@@ -15,6 +15,7 @@ export default function Task() {
   const [priority, setPriority] = useState<string>('');
   const [responsable, setResponsable] = useState<string>('');
   const [status, setStatus] = useState<string>('');
+  const [details, setDetails] = useState<string>('Digite aqui os detalhes da sua tarefa');
   const user = localStorage.getItem('user');
   const userData = user ? JSON.parse(user) : null;
 
@@ -31,6 +32,7 @@ export default function Task() {
         priority,
         responsable,
         status,
+        details,
         id_user: userData?.id,
       });
       toast.success('Atividade criada com sucesso!');
@@ -53,7 +55,7 @@ export default function Task() {
       <h1>Task</h1>
       <Form onSubmit={handleSubmit}>
         <label htmlFor="description">
-          Descrição
+          Breve descrição
           <input
             type="text"
             name="descrption"
@@ -95,6 +97,10 @@ export default function Task() {
             <option value="Em-andamento">Em Andamento</option>
             <option value="Concluida">Concluída</option>
           </select>
+        </label>
+        <label htmlFor="Detalhes">
+          Detalhes
+          <textarea name="details" id="details" value={details} onChange={e => setDetails(e.target.value)} />
         </label>
         <button>Salvar</button>
       </Form>

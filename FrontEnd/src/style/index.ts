@@ -67,7 +67,7 @@ export const Form = styled.form`
     margin-bottom: 10px;
   }
 
-  input, select {
+  input, select, textarea {
     height: 40px;
     font-size: 18px;
     border: 1px solid #ddd;

@@ -6,7 +6,7 @@ import Modal from 'react-modal';
 
 import { Form } from '../../style';
 import api from '../../services/axios';
-import { TaskContainer, Title, ModalOverlay, ModalContent, Task, CardsContainer } from './styled';
+import { TaskContainer, Title, ModalOverlay, ModalContent, Task, CardsContainer, Details, DetailsModal, TextDetail } from './styled';
 import { get } from 'lodash';
 import Loading from '../../components/loading';
 
@@ -17,6 +17,7 @@ interface Task {
   responsable: string;
   status: string;
   computerName: string;
+  details: string;
 }
 
 export default function Tasks() {
@@ -24,6 +25,7 @@ export default function Tasks() {
   const [filter, setFilter] = useState('');
   const [modalDeleteIsOpen, setModaldeleteIsOpen] = useState(false);
   const [modalEditIsOpen, setModalEditIsOpen] = useState(false);
+  const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
   const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedTaskId, setSelectedTaskId] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -32,6 +34,7 @@ export default function Tasks() {
   const [responsable, setResponsable] = useState<string>('');
   const [status, setStatus] = useState<string>('');
   const [priority, setPriority] = useState<string>('');
+  const [details, setDetails] = useState<string>('');
 
   function openModalDelete(id: string) {
     setSelectedTaskId(id);
@@ -42,18 +45,24 @@ export default function Tasks() {
     setModaldeleteIsOpen(false);
   }
 
+  function closeDetailsModal(){
+    setDetailsModalIsOpen(false);
+  }
+
   function openModalEdit(
     id: string,
     description: string,
     responsable: string,
     status: string,
-    priority: string
+    priority: string,
+    details: string,
   ) {
     setSelectedTaskId(id);
     setDescription(description);
     setResponsable(responsable);
     setStatus(status);
     setPriority(priority);
+    setDetails(details);
 
     setModalEditIsOpen(true);
   }
@@ -122,6 +131,7 @@ export default function Tasks() {
         responsable,
         status,
         priority,
+        details,
       });
 
       closeModalEdit();
@@ -267,6 +277,21 @@ export default function Tasks() {
     };
   }, [tasks]);
 
+  function detailsModal(
+    id: string,
+    description: string,
+    responsable: string,
+    status: string,
+    priority: string,
+    details: string,){
+      setSelectedTaskId(id);
+      setDescription(description);
+      setResponsable(responsable);
+      setStatus(status);
+      setPriority(priority);
+      setDetails(details);
+      setDetailsModalIsOpen(true);
+  }
   return (
     <>
       {isLoading && <Loading />}
@@ -296,7 +321,20 @@ export default function Tasks() {
           <h1>Pendentes</h1>
           {tasksPedings.length > 0 &&
             tasksPedings.map((task) => (
-              <Task key={task.id} draggable="true" data-role="task-card" data-task={JSON.stringify(task)}>
+              <Task  onClick={() =>
+    detailsModal(
+      task.id,
+      task.description,
+      task.responsable,
+      task.status,
+      task.priority,
+      task.details,
+    )
+  }
+  key={task.id}
+  draggable="true"
+  data-role="task-card"
+  data-task={JSON.stringify(task)}>
                 <li>
                   <p>
                     <strong>Descrição:</strong> <section data-tooltip={task.description}>{task.description}</section>
@@ -313,21 +351,24 @@ export default function Tasks() {
                   {localStorage.getItem('token') !== null && (
                     <p>
                       <button
-                        onClick={() =>
+                        onClick={(e) =>{
+                          e.stopPropagation();
                           openModalEdit(
                             task.id,
                             task.description,
                             task.responsable,
                             task.status,
-                            task.priority
+                            task.priority,
+                            task.details,
                           )
                         }
+                      }
                       >
                         <FaEdit size={20} />
                       </button>
                       <button
                         className="buttonDelete"
-                        onClick={() => openModalDelete(task.id)}
+                        onClick={(e) => { e.stopPropagation(); openModalDelete(task.id)}}
                       >
                         <FaWindowClose size={20} />
                       </button>
@@ -342,7 +383,20 @@ export default function Tasks() {
           <h1>Em andamento</h1>
           {tasksWorking.length > 0 &&
             tasksWorking.map((task) => (
-              <Task key={task.id} draggable="true" data-role="task-card" data-task={JSON.stringify(task)}>
+              <Task  onClick={() =>
+    detailsModal(
+      task.id,
+      task.description,
+      task.responsable,
+      task.status,
+      task.priority,
+      task.details,
+    )
+  }
+  key={task.id}
+  draggable="true"
+  data-role="task-card"
+  data-task={JSON.stringify(task)}>
                 <li>
                   <p>
                     <strong>Descrição:</strong> <section data-tooltip={task.description}>{task.description}</section>
@@ -359,21 +413,24 @@ export default function Tasks() {
                   {localStorage.getItem('token') !== null && (
                     <p>
                       <button
-                        onClick={() =>
+                        onClick={(e) =>{
+                          e.stopPropagation();
                           openModalEdit(
                             task.id,
                             task.description,
                             task.responsable,
                             task.status,
-                            task.priority
+                            task.priority,
+                            task.details,
                           )
+                        }
                         }
                       >
                         <FaEdit size={20} />
                       </button>
                       <button
                         className="buttonDelete"
-                        onClick={() => openModalDelete(task.id)}
+                        onClick={(e) => { e.stopPropagation(); openModalDelete(task.id)}}
                       >
                         <FaWindowClose size={20} />
                       </button>
@@ -388,7 +445,20 @@ export default function Tasks() {
           <h1>Concluidas</h1>
           {tasksDone.length > 0 &&
             tasksDone.map((task) => (
-              <Task key={task.id} draggable="true" data-role="task-card" data-task={JSON.stringify(task)}>
+              <Task  onClick={() =>
+    detailsModal(
+      task.id,
+      task.description,
+      task.responsable,
+      task.status,
+      task.priority,
+      task.details,
+    )
+  }
+  key={task.id}
+  draggable="true"
+  data-role="task-card"
+  data-task={JSON.stringify(task)}>
                 <li>
                   <p>
                     <strong>Descrição:</strong> <section data-tooltip={task.description}>{task.description}</section>
@@ -405,21 +475,24 @@ export default function Tasks() {
                   {localStorage.getItem('token') !== null && (
                     <p>
                       <button
-                        onClick={() =>
+                        onClick={(e) =>{
+                          e.stopPropagation();
                           openModalEdit(
                             task.id,
                             task.description,
                             task.responsable,
                             task.status,
-                            task.priority
+                            task.priority,
+                            task.details,
                           )
+                        }
                         }
                       >
                         <FaEdit size={20} />
                       </button>
                       <button
                         className="buttonDelete"
-                        onClick={() => openModalDelete(task.id)}
+                        onClick={(e) => { e.stopPropagation(); openModalDelete(task.id)}}
                       >
                         <FaWindowClose size={20} />
                       </button>
@@ -514,6 +587,10 @@ export default function Tasks() {
                     <option value="Baixa">Baixa</option>
                   </select>
                 </label>
+                <label htmlFor="details">
+                  Detalhes
+                  <textarea name="details" id="details" value={details} onChange={e => setDetails(e.target.value)}/>
+                </label>
                 <div className="buttons">
                 <button className="cancel" onClick={closeModalEdit}>
                   Cancelar
@@ -524,7 +601,46 @@ export default function Tasks() {
             </section>
           </ModalContent>
         </ModalOverlay>
-      </Modal>
+        </Modal>
+
+        <Modal
+        isOpen={detailsModalIsOpen}
+        onRequestClose={closeDetailsModal}
+        contentLabel="Example modal"
+        overlayClassName="modal-overlay"
+        className="modal-content"
+        >
+        <ModalOverlay>
+          <ModalContent>
+            <section>
+              <button className="close" onClick={closeDetailsModal}>
+                <FaWindowClose size={25} />
+              </button>
+              <h1>{description}</h1>
+              <DetailsModal>
+                <Details>
+                  <label htmlFor="responsable">
+                    Responsável:
+                    <h3>{responsable}</h3>
+                  </label>
+                  <label htmlFor="status">
+                    Status:
+                    <h3>{status}</h3>
+                  </label>
+                  <label htmlFor="priority">
+                    Prioridade:
+                    <h3>{priority}</h3>
+                  </label>
+                </Details>
+                <TextDetail>
+                  Detalhes:
+                  <h3>{details}</h3>
+                </TextDetail>
+              </DetailsModal>
+            </section>
+          </ModalContent>
+        </ModalOverlay>
+        </Modal>
     </>
   );
 }

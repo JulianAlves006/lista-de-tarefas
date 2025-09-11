@@ -126,7 +126,7 @@ export const Title = styled.section`
     &:focus {
       border: 1px solid ${primaryColor};
     }
-    
+
     &:hover {
       background-color: ${primaryColor};
     }
@@ -148,9 +148,12 @@ export const ModalContent = styled.div`
   border-radius: 12px;
   padding: 24px;
   width: 100%;
-  max-width: 420px;
+  max-width: 620px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   position: relative;
+  overflow-wrap: break-word; /* quebra palavras muito grandes */
+  word-break: break-word;    /* suporte adicional */
+  white-space: normal;
 
   animation: fadeInUp 0.25s ease forwards;
 
@@ -212,5 +215,38 @@ export const ModalContent = styled.div`
       opacity: 1;
       transform: translateY(0);
     }
+  }
+`;
+
+export const DetailsModal = styled.section`
+  max-height: 90vh;   /* ocupa no máximo 90% da altura da tela */
+  overflow-y: auto;   /* ativa scroll vertical */
+  overflow-x: hidden; /* evita scroll horizontal */
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  box-sizing: border-box;
+`;
+
+export const Details = styled.section`
+  display: flex;
+  justify-content: space-between;
+
+  label {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+  }
+`;
+
+export const TextDetail = styled.span`
+  margin-top: 10px;
+  font-size: 22px;
+  border: solid 1px ${primaryColor};
+  border-radius: 10px;
+  padding: 10px;
+  h3{
+    margin-top: 10px;
+    font-size: 20px;
   }
 `;

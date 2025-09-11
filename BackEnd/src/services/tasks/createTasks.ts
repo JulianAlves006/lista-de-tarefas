@@ -10,13 +10,15 @@ interface Task {
   status: String;
   computerName: String;
   id_user: String;
+  details: String;
 }
 
 class TaskCreater {
   async createTask(body: Task, id_user: string) {
-    const { description, priority, responsable, status } = body;
+    const { description, priority, responsable, status, details } = body;
     const computerName = os.hostname();
     const id = uuidv4();
+    
     if (!description || !priority || !responsable || !status) {
       throw new Error('Todos os campos são obrigatórios!');
     }
@@ -29,6 +31,7 @@ class TaskCreater {
       status,
       computerName,
       id_user,
+      details,
     };
     try {
       const docRef = await db.collection('tasks').add(newTask);

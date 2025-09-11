@@ -9,11 +9,12 @@ interface Task {
   status: String;
   computerName: String;
   id_user: String;
+  details: String;
 }
 
 class TaskEditer {
   async editTask(body: Task, id_user: string) {
-    const { id, description, priority, responsable, status } = body;
+    const { id, description, priority, responsable, status, details } = body;
     const computerName = os.hostname();
     if (!id || !id_user) throw new Error('O id da tarefa e do usuário é obrigatório para a edição da tarefa');
     const newTask: Task = {
@@ -24,6 +25,7 @@ class TaskEditer {
       status,
       computerName,
       id_user,
+      details,
     };
       const snapshot = await db
         .collection('tasks')
@@ -45,6 +47,7 @@ class TaskEditer {
         priority: newTask.priority,
         responsable: newTask.responsable,
         status: newTask.status,
+        details: newTask.details,
         computerName: newTask.computerName,
       });
 
