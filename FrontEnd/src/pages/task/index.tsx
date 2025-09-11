@@ -16,6 +16,7 @@ export default function Task() {
   const [responsable, setResponsable] = useState<string>('');
   const [status, setStatus] = useState<string>('');
   const user = localStorage.getItem('user');
+  const userData = user ? JSON.parse(user) : null;
 
   async function handleSubmit(e: any) {
     e.preventDefault();
@@ -30,7 +31,7 @@ export default function Task() {
         priority,
         responsable,
         status,
-        id_user: user?.id,
+        id_user: userData?.id,
       });
       toast.success('Atividade criada com sucesso!');
       navigate('/tasks');
