@@ -14,7 +14,6 @@ A aplicação implementa um **CRUD de lista de tarefas** e inclui **funcionalida
 - Listar tarefas
 - Editar tarefa
 - Excluir tarefa (com modal de confirmação)  
-✅ Relacionar cada tarefa ao computador em que foi criada (`os.hostname()`)  
 ✅ Proteção de rotas com token JWT  
 ✅ Frontend em React com **React Router**, **React Icons**, **React Modal** e **React Toastify**  
 
