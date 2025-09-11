@@ -36,7 +36,7 @@ export default function Login() {
         password,
       });
       localStorage.setItem('token', data.token);
-      localStorage.setItem('id_user', data.user.id)
+      localStorage.setItem('user', JSON.stringify(data.user));
       toast.success('Login realizado com sucesso!');
       navigate('/tasks');
     } catch (error) {

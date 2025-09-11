@@ -23,7 +23,9 @@ export default new (class LoginService {
       if (!isValid) throw new Error('Usuário ou senha inválidos');
 
       const payload = {
-        id: snap.docs[0].id,
+        id_fire: snap.docs[0].id,
+        id: userData.id,
+        name: userData.name,
         email: email,
         role: userData.role || 'user',
       };
@@ -36,13 +38,14 @@ export default new (class LoginService {
         message: 'Login realizado com sucesso!',
         token: token,
         user: {
-          id: payload.id,
+          id_fire: payload.id_fire,
+          id: userData.id,
+          name: payload.name,
           email: payload.email,
           role: userData.role || 'admin',
         },
       };
     } catch (error) {
-      console.error(error);
       return error;
     }
   }

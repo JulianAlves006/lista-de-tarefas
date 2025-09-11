@@ -6,7 +6,7 @@ import TaskEditer from '../services/tasks/editTask';
 class TasksController {
   async getTasks(req: any, res: any) {
     if(!req.user.id) return res.status(401).json('Você precisa logar');
-    const response = await TaskServices.getAllTasks(req.user.id);
+    const response = await TaskServices.getAllTasks(req.user.id_fire);
     res.json(response);
   }
 

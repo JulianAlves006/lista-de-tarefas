@@ -42,10 +42,9 @@ export default function Register() {
         email,
         password,
       });
-      console.log(data);
       toast.success("Usuário criado com sucesso!");
       localStorage.setItem('token', data.token);
-      localStorage.setItem('id_user', data.id)
+      localStorage.setItem('user', data)
       navigate('/tasks');
     } catch (error) {
       const errors = get(error, 'response.data.errors', []) as string[];

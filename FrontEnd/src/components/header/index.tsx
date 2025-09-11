@@ -1,6 +1,6 @@
 
 import { Link, useNavigate } from 'react-router-dom';
-import { FaHome, FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaSignInAlt, FaSignOutAlt, FaUserAlt } from 'react-icons/fa';
 import { Nav } from './styled';
 import { useEffect, useState } from 'react';
 
@@ -34,7 +34,7 @@ export default function Header() {
 
   function handleLogOut(){
     localStorage.removeItem('token');
-    localStorage.removeItem('id_user');
+    localStorage.removeItem('user');
     setIsLogged(false);
     navigate('/');
   }
@@ -43,6 +43,11 @@ export default function Header() {
       <Link to="/tasks">
         <FaHome size={25} />
       </Link>
+      {isLogged &&
+        <Link to='/user'>
+          <FaUserAlt size={23}/>
+        </Link>
+      }
       {isLogged ? (
         <button className='loginLogout' onClick={handleLogOut}>
           <p>Deslogar</p><FaSignOutAlt size={25} />

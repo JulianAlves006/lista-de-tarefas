@@ -6,6 +6,7 @@ import Login from '../pages/login';
 import Register from '../pages/register';
 import Task from '../pages/task';
 import PageNotFound from '../pages/404';
+import User from '../pages/user';
 
 export default function AppRoutes() {
   return (
@@ -14,6 +15,7 @@ export default function AppRoutes() {
       <Route path='/tasks' element={<Tasks />} />
       <Route path='/register' element={<Register />}/>
       <Route path='/task' element={<Task />} />
+      <Route path='/user' element={<User />}/>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

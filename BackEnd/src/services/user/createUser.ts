@@ -4,17 +4,9 @@ import {randomUUID} from 'node:crypto'
 import argon2 from 'argon2';
 import jwt from 'jsonwebtoken';
 
+import { User } from '../../controllers/usersController';
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
-
-export interface User {
-  id: string;
-  name: string;
-  email: string;
-  passwordHash: string;
-  createdAt: number;
-  role?: 'user' | 'admin';
-}
 
 export default class UserService {
   static usersCol = db.collection('users');
