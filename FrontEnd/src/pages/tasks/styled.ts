@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import { primaryColor } from '../../config/colors';
-import style from '../../style';
 
 export const CardsContainer = styled.section`
   display: flex;

@@ -21,9 +21,6 @@ interface Task {
 }
 
 export default function Tasks() {
-  const [tasksInColumnPending, setTasksInColumnPending] = useState(0);
-  const [tasksInColumnWorking, setTasksInColumnWorking] = useState(0);
-  const [tasksInColumnDone, setTasksInColumnDone] = useState(0);
   const [priorityFilter, setPriorityFilter] = useState('Alta');
   const [filter, setFilter] = useState('');
   const [modalDeleteIsOpen, setModaldeleteIsOpen] = useState(false);
@@ -266,10 +263,6 @@ export default function Tasks() {
       column.addEventListener('drop', handleDrop);
     });
 
-    setTasksInColumnPending(tasksPedings.length);
-    setTasksInColumnWorking(tasksWorking.length);
-    setTasksInColumnDone(tasksDone.length);
-
     // Cleanup
     return () => {
       cards.forEach(card => {
@@ -449,7 +442,7 @@ export default function Tasks() {
           }
         </TaskContainer>
         <TaskContainer data-role="task-column" data-status="Concluida">
-          <h1>Concluidas - Cards: {tasksInColumnDone}</h1>
+          <h1>Concluidas - Cards: {tasksDone.length}</h1>
           {tasksDone.length > 0 &&
             tasksDone.map((task) => (
               <Task  onClick={() =>
