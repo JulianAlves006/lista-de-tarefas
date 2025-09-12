@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FaEdit, FaWindowClose, FaPlus } from 'react-icons/fa';
+import { FaEdit, FaWindowClose, FaPlus, FaExclamationTriangle } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 import Modal from 'react-modal';
 
 import { Form } from '../../style';
 import api from '../../services/axios';
-import { TaskContainer, Title, ModalOverlay, ModalContent, Task, CardsContainer, Details, DetailsModal, TextDetail } from './styled';
+import { TaskContainer, Title, ModalOverlay, ModalContent, Task, CardsContainer, Details, DetailsModal, TextDetail, TaskContainerHeader } from './styled';
 import { get } from 'lodash';
 import Loading from '../../components/loading';
 
@@ -21,6 +21,9 @@ interface Task {
 }
 
 export default function Tasks() {
+  const [tasksInColumnPending, setTasksInColumnPending] = useState(0);
+  const [tasksInColumnWorking, setTasksInColumnWorking] = useState(0);
+  const [tasksInColumnDone, setTasksInColumnDone] = useState(0);
   const [priorityFilter, setPriorityFilter] = useState('Alta');
   const [filter, setFilter] = useState('');
   const [modalDeleteIsOpen, setModaldeleteIsOpen] = useState(false);
@@ -263,6 +266,10 @@ export default function Tasks() {
       column.addEventListener('drop', handleDrop);
     });
 
+    setTasksInColumnPending(tasksPedings.length);
+    setTasksInColumnWorking(tasksWorking.length);
+    setTasksInColumnDone(tasksDone.length);
+
     // Cleanup
     return () => {
       cards.forEach(card => {
@@ -318,7 +325,7 @@ export default function Tasks() {
       </Title>
       <CardsContainer>
         <TaskContainer data-role="task-column" data-status="Pendente">
-          <h1>Pendentes</h1>
+          <TaskContainerHeader><h1>Pendentes - Cards: {tasksPedings.length}</h1>{tasksPedings.length > 8 && <section data-tooltip="Muitos cards na coluna!"><FaExclamationTriangle size={25} color='red'/></section>}</TaskContainerHeader>
           {tasksPedings.length > 0 &&
             tasksPedings.map((task) => (
               <Task  onClick={() =>
@@ -380,7 +387,7 @@ export default function Tasks() {
           }
         </TaskContainer>
         <TaskContainer data-role="task-column" data-status="Em-andamento">
-          <h1>Em andamento</h1>
+        <TaskContainerHeader><h1>Em andamento - Cards: {tasksWorking.length}</h1>{tasksWorking.length > 8 && <section data-tooltip="Muitos cards na coluna!"><FaExclamationTriangle size={25} color='red'/></section>}</TaskContainerHeader>
           {tasksWorking.length > 0 &&
             tasksWorking.map((task) => (
               <Task  onClick={() =>
@@ -442,7 +449,7 @@ export default function Tasks() {
           }
         </TaskContainer>
         <TaskContainer data-role="task-column" data-status="Concluida">
-          <h1>Concluidas</h1>
+          <h1>Concluidas - Cards: {tasksInColumnDone}</h1>
           {tasksDone.length > 0 &&
             tasksDone.map((task) => (
               <Task  onClick={() =>

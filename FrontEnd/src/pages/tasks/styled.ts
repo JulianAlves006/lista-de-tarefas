@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { primaryColor } from '../../config/colors';
+import style from '../../style';
 
 export const CardsContainer = styled.section`
   display: flex;
@@ -17,36 +18,6 @@ export const TaskContainer = styled.ul`
   height: 98%; /* ajuste conforme necessário */
   overflow-y: auto;  /* ativa scroll vertical só no container */
   overflow-x: hidden; /* evita barra horizontal */
-
-  div + div{
-    margin: 10px 0 0px 0;
-  }
-
-  h1{
-    font-size: 24px;
-    text-align: center;
-  }
-`;
-
-export const Task = styled.div`
-  border: 1px solid grey;
-  border-radius: 20px;
-  padding: 5px 0;
-  margin-top: 30px;
-  overflow: hidden;
-  white-space: nowrap;
-  cursor: grab;
-
-  li {
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-  }
-
-  p {
-    margin-top: 8px;
-    display: flex;
-  }
 
   section::before{
     content: attr(data-tooltip);
@@ -68,6 +39,44 @@ export const Task = styled.div`
   section:hover::before{
     opacity: 1;
     display: inline;
+  }
+
+  div + div{
+    margin: 10px 0 0px 0;
+  }
+
+  h1{
+    font-size: 24px;
+    text-align: center;
+  }
+
+  svg{
+    margin-left: 10px;
+  }
+`;
+
+export const TaskContainerHeader = styled.div`
+  display: flex;
+`;
+
+export const Task = styled.div`
+  border: 1px solid grey;
+  border-radius: 20px;
+  padding: 5px 0;
+  margin-top: 30px;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: grab;
+
+  li {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  p {
+    margin-top: 8px;
+    display: flex;
   }
 
   button {
